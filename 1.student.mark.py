@@ -1,109 +1,107 @@
+import os
 
-students = []
-courses = []
-marks = {}
+list_student = [] #list
+list_course = [] #list
 
-def input_number_of_students():
-    return int(input("Enter the number of students in the class: "))
+dialogue_str = """
+Menu:
+0. Clear Screen
+1. Add Student
+2. Add Course
+3. Input marks for a course
+4. Show all students
+5. Show all courses
+6. Print marks for all Students of a Course
+7. Exit
+Select an option: 
+"""
 
-def input_student_info():
-    student_id = input("Enter student ID: ")
-    name = input("Enter student name: ")
-    dob = input("Enter student Date of Birth (DD/MM/YYYY): ")
-    students.append((student_id, name, dob))
-
-def input_number_of_courses():
-    return int(input("Enter the number of courses: "))
-
-def input_course_info():
-    course_id = input("Enter course ID: ")
-    name = input("Enter course name: ")
-    courses.append((course_id, name))
-
-def select_course_and_input_marks():
-    if not courses:
-        print("No courses available.")
+def print_marks_for_course():
+    if not list_course:
+        print("No courses have been added yet.")
         return
+    c_id = input("Enter the Course ID: ")
+    for c in list_course:
+        if c["c_id"] == c_id:
+            if "students" not in c:
+                print(f"No marks recorded for the course: {c['c_name']} (ID: {c_id}).")
+                return
+            print(f"Marks for course: {c['c_name']} (ID: {c_id})")
+            print("-" * 30)
+            if "students" in c:
+                for st in c["students"]:
+                    print(f"    {st}: {c['students'][st]}")
+            print("-" * 30)
+            return
+    print(f"Course with ID {c_id} not found.")
 
-    print("Available courses:")
-    for i, course in enumerate(courses):
-        print(f"{i + 1}. {course[1]} (ID: {course[0]})")
-    
-    course_index = int(input("Select a course by number: ")) - 1
-    if course_index < 0 or course_index >= len(courses):
-        print("Invalid selection.")
+def print_all_students():
+    if not list_student:
+        print("No students have been added yet.")
         return
-    
-    course_id = courses[course_index][0]
-    marks[course_id] = {}
-    for student in students:
-        mark = float(input(f"Enter marks for student {student[1]} (ID: {student[0]}): "))
-        marks[course_id][student[0]] = mark
+    print("-" * 30)
+    print("All students:")
+    for st in list_student:
+        print(f"Name: {st["st_name"]} - ID: {st["st_id"]}")
+    print("-" * 30)
 
-# Listing functions
-def list_courses():
-    print("Courses:")
-    for course in courses:
-        print(f"ID: {course[0]}, Name: {course[1]}")
-
-def list_students():
-    print("Students:")
-    for student in students:
-        print(f"ID: {student[0]}, Name: {student[1]}, DoB: {student[2]}")
-
-def show_student_marks_for_course():
-    if not courses:
-        print("No courses available.")
+def print_all_courses():
+    if not list_course:
+        print("No courses have been added yet.")
         return
+    print("-" * 30)
+    print("All courses:")
+    for c in list_course:
+        print(f"Name: {c["c_name"]} - ID: {c["c_id"]}")
+    print("-" * 30)
 
-    print("Available courses:")
-    for i, course in enumerate(courses):
-        print(f"{i + 1}. {course[1]} (ID: {course[0]})")
+def add_mark():
+    # course => list of student => mark
+    # course = {"students": {"s_id": mark}}
+    c_id = input("Course ID: ")
+    st_id = input("Student ID: ")
+    mark = input("Mark: ")
+    for c in list_course:
+        if c["c_id"] == c_id:
+            if "students" not in c:
+                c["students"] = {}
+            for st in list_student:
+                if st["st_id"] == st_id:
+                    c["students"][st_id] = mark
+                    return
+            print("Can't find this STUDENT !")
+            return
+    print("Can't find this COURSE !")
     
-    course_index = int(input("Select a course by number: ")) - 1
-    if course_index < 0 or course_index >= len(courses):
-        print("Invalid selection.")
-        return
-    
-    course_id = courses[course_index][0]
-    if course_id not in marks:
-        print(f"No marks entered for course {courses[course_index][1]} yet.")
-        return
-    
-    print(f"Marks for course {courses[course_index][1]}:")
-    for student in students:
-        student_id = student[0]
-        student_name = student[1]
-        student_mark = marks[course_id].get(student_id, "N/A")
-        print(f"Student: {student_name} (ID: {student_id}), Mark: {student_mark}")
+def main():
+    while True:
+        choice = int(input(dialogue_str))
+        if choice not in [0,1,2,3,4,5,6,7]:
+            print("Invalid choice. Try again.")
+            continue
+        if choice == 0:
+            os.system('cls' if os.name == 'nt' else 'clear') # Window: cls != Linux: clear
+        elif choice == 1:
+            st = {}
+            st["st_name"] = input("Student name: ")
+            st["st_id"] = input("Student ID: ")
+            list_student.append(st)
+        elif choice == 2:
+            c = {}
+            c["c_name"] = input("Course name: ")
+            c["c_id"] = input("Course ID: ")
+            list_course.append(c)
+        elif choice == 3:
+            add_mark()
+        elif choice == 4:
+            print_all_students()
+        elif choice == 5:
+            print_all_courses()
+        elif choice == 6:
+            print_marks_for_course()
+        elif choice == 7:
+            print("Bai bai <3 <3 hihiihhihihiihhihihhhiihihihi")
+            break
 
-num_students = input_number_of_students()
-for _ in range(num_students):
-    input_student_info()
-
-num_courses = input_number_of_courses()
-for _ in range(num_courses):
-    input_course_info()
-
-while True:
-    print("\nMenu:")
-    print("1. List courses")
-    print("2. List students")
-    print("3. Input marks for a course")
-    print("4. Show student marks for a given course")
-    print("5. Exit")
-    
-    choice = int(input("Select an option: "))
-    if choice == 1:
-        list_courses()
-    elif choice == 2:
-        list_students()
-    elif choice == 3:
-        select_course_and_input_marks()
-    elif choice == 4:
-        show_student_marks_for_course()
-    elif choice == 5:
-        print("Exiting...")
-        break
-    else:
-        print("Invalid choice. Try again.")
+if __name__ == "__main__":
+    main()
