@@ -18,8 +18,8 @@ Select an option:
 """
 
 def output():
-    list_student = dm.Student_list()
-    list_course = dm.Course_list()
+    list_student = md.Student_list()
+    list_course = md.Course_list()
     while True:
         choice = int(input(dialogue_str))
         if choice not in [0,1,2,3,4,5,6,7,1337]:
