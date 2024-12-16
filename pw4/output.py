@@ -1,4 +1,4 @@
-import domains as dm
+from domains import models as md
 import input as ip
 import math 
 import os
