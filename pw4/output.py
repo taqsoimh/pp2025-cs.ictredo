@@ -1,8 +1,9 @@
+
 from domains import models as md
 import input as ip
 import math 
 import os
- 
+
 dialogue_str = """
 Menu:
 0. Clear Screen
