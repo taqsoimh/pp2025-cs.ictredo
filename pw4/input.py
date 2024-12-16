@@ -1,16 +1,17 @@
-import domains as dm
+from domains import models as md
+
 def input_student_dialogue():
     st_id = input("Enter student ID: ")
     name = input("Enter student name: ")
     dob = input("Enter student Date of Birth (YYYY-MM-DD): ")
-    student = dm.Student(st_id, name, dob)
+    student = md.Student(st_id, name, dob)
     return student
 
 def input_course_dialogue():
     c_id = input("Enter course ID: ")
     c_name = input("Enter course name: ")
     credit = input("Enter course credit: ")
-    course = dm.Course(c_id, c_name, credit)
+    course = md.Course(c_id, c_name, credit)
     return course
 
 def input_mark(list_student, list_course):
