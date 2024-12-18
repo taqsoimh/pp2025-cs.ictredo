@@ -1,0 +1,3 @@
+ID: ST01 - Name: Quoc - DoB: 2004-08-27
+ID: ST02 - Name: Dat - DoB: 2004-01-04
+ID: ST03 - Name: Nhat_Anh - DoB: 2004-09-02
